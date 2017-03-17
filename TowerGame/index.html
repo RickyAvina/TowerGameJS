@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Tower Defense Game</title>
+    <script src="game.js" type="text/javascript"></script>
+    <script src="mover.js" type="text/javascript"></script>
+    <script src="boid.js" type="text/javascript"></script>
+    <script src="player.js" type="text/javascript"></script>
+    <script src="predator.js" type="text/javascript"></script>
+    <script src="safearea.js" type="text/javascript"></script>
+    <script src="level.js" type="text/javascript"></script>
+    <script src="tower.js" type="text/javascript"></script>
+    <script src="bullet.js" type="text/javascript"></script>
+    <script src="cell.js" type="text/javascript"></script>
+    <script src="myvector.js" type="text/javascript"></script>
+    <script src="pathfinder.js" type="text/javascript"></script>
+    <script src="enemy.js" type="text/javascript"></script>
+    <script src="vector2d.js" type="text/javascript"></script>
+
+    <style> body {padding: 0; margin: auto; text-align: center;} </style>
+  </head>
+  <body>
+    <div id='menuDiv'></div>
+    <div style="margin: auto;">
+        <canvas id="canvas" width="1200" height="800">
+         Your browser does not support the HTML 5 Canvas.
+        </canvas>
+    </div>
+    <script>
+    var menuDiv = document.getElementById("menuDiv");
+    menuDiv.style.width = '1200px';
+    menuDiv.style.height = '100px';
+    menuDiv.style.background = 'black';
+    menuDiv.style.margin = 'auto';
+
+    createMenuTileDivs();
+
+    function createMenuTileDivs(){
+    var tiles = [];
+    for(var i = 0; i < 5; i++){
+      var mtd = document.createElement("div");
+
+      var cnvTurImgPath = "images/towers/d" + i + ".png";  // small tower image for canvas
+      var cnvBulImgPath = "images/bullets/b" + i + ".png";     // bullet image for canvas
+      var imgName = 'images/towers/tow' + i + '.png'; // large image for menu tile
+
+      mtd.cnvTurImg = new Image();
+      mtd.cnvTurImg.addEventListener('load',this.hideImgElement,false);
+      mtd.cnvTurImg.addEventListener('error', function() { console.log(cnvTurImgPath + " failed to load"); }, false);
+      mtd.cnvTurImg.src = cnvTurImgPath;    // start loading image
+
+      mtd.cnvBulImg = new Image();
+      mtd.cnvBulImg.addEventListener('load',this.hideImgElement,false);
+      mtd.cnvBulImg.addEventListener('error', function() { console.log(cnvBulImgPath + " failed to load"); }, false);
+      mtd.cnvBulImg.src = cnvBulImgPath;    // start loading image
+
+      menuDiv.appendChild(mtd);
+
+      mtd.cost = 100*i +50;
+      mtd.id = 'towImgDiv' + i;
+      //  Adding menu tile styles
+      mtd.style.float = 'left';   //
+      mtd.style.marginLeft = "90px";
+      mtd.style.margintop = "12px";
+      mtd.style.borderRadius = "50%";
+      mtd.style.width = "90px";
+      mtd.style.height = "90px";
+      mtd.setClass = "menuTile";
+      mtd.style.background = "green";
+      mtd.towerImage = new Image();
+      mtd.towerImage.src = cnvTurImgPath;
+
+      mtd.cnvBulImg.addEventListener('load',function(){console.log("Tower image loaded");},false);
+      mtd.cnvBulImg.addEventListener('error', function() { console.log(cnvBulImgPath + " failed to load"); }, false);
+
+      tiles.push(mtd);
+
+      var tImg = new Image();
+      tImg.addEventListener('error', function() { console.log(imgName + " failed to load"); }, false);
+      tImg.src = imgName;
+      mtd.addEventListener("mouseover", function(){this.style.background = "grey"}, false);
+      mtd.addEventListener("mouseout", function(){this.style.background = "green"}, false);
+      mtd.addEventListener("mouseup", function(){this.style.background = "gray"}, false);
+
+      this.isClicking = false;
+
+      mtd.addEventListener("click", function(){
+          game.currentImage = this.towerImage;
+      }, false);
+
+      mtd.addEventListener("mousedown", function(){this.style.background = "black"}, false);
+      mtd.appendChild(tImg);
+
+    }
+    return tiles;
+  }
+    </script>
+
+  <button type = "button" id="generate"> Generate Path </button>
+  <button type = "button" id="spawnEnemy"> RELEASE THE BEAST </button>
+  </body>
+</html>
